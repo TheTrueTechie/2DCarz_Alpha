@@ -10,11 +10,18 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class startScreen extends JPanel implements ActionListener, KeyListener {
+ class startScreen extends JPanel implements ActionListener, KeyListener {
+	 
+	JButton startButton = new JButton(); 
+	JButton helpButton = new JButton(); 
+	JButton exitButton = new JButton(); 
+	
 	boolean Up;
 	boolean Down;
 	boolean Right;
@@ -53,18 +60,43 @@ public class startScreen extends JPanel implements ActionListener, KeyListener {
 
 		}
 
-		JFrame mainFrame = new JFrame();
+		JFrame gameFrame = new JFrame(); 
+		JPanel gamePanel = new JPanel(); 
+		
+		startButton.addActionListener(this);
+		helpButton.addActionListener(this);
+		exitButton.addActionListener(this);
+		
+		startButton.setText("Start");
+		helpButton.setText("Help");
+		exitButton.setText("Exit");
+		
+		gameFrame.add(gamePanel); 
+		gamePanel.add(startButton);
+		gamePanel.add(helpButton);
+		gamePanel.add(exitButton);
+		
+		gameFrame.pack();
+		
+		gameFrame.setVisible(true);
+		
+		
+		
+		
+		
+		mainFrame = new JFrame();
 
-		mainFrame.add(this);
-
+		
+		
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setTitle("Carz Alpha");
 		mainFrame.setSize(500, 700);
-		mainFrame.setVisible(true);
+		//mainFrame.setVisible(true);
 
 		mainFrame.addKeyListener(this);
 
 		time = new Timer(1000 / 60, this);
+		mainFrame.add(this);
 		time.start();
 	}
 
@@ -93,6 +125,17 @@ public class startScreen extends JPanel implements ActionListener, KeyListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
+		if (e.getSource() instanceof JButton && startButton==(JButton)e.getSource()) {
+				mainFrame.setVisible(true);
+		}
+		if (e.getSource() instanceof JButton && helpButton==(JButton)e.getSource()) {
+			JOptionPane.showMessageDialog(null, "Use the arrow keys to move the direction of the car. Your objective is to dodge the cars.");
+	}
+		if (e.getSource() instanceof JButton && exitButton==(JButton)e.getSource()) {
+			System.exit(0);
+	}
+		
 		keyController();
 
 		Update();
@@ -181,11 +224,16 @@ public class startScreen extends JPanel implements ActionListener, KeyListener {
 			rH.Update();
 			if (rH.getCollisionBox().intersects(car.getCollisionBox())) {
 				System.out.println("Hit!");
+				JOptionPane.showMessageDialog(null, "You have been HIT! GAME OVER");
+				System.exit(0);
 			}
 		}
 		
 		car.Update();
 		coneGenerator(); 
+		
+		
+		
 	}
 
 }
